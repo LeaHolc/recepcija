@@ -6,8 +6,6 @@ from controller import dobi_parcele_za_prikaz, \
     dobi_info_parcele, dodaj_gosta_na_rezervacijo, naredi_rezervacijo, dobi_rezervacijo_po_id, zakljuci_na_datum_in_placaj, dobi_postavke_racuna
 import datetime as dt
 
-TEMPLATE_PATH.append('./reception/views')
-
 @bottle.get('/')
 def root():
     redirect('/domov')
