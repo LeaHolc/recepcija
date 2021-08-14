@@ -1,0 +1,22 @@
+% rebase('base.html')
+  
+<h1 class="bd-heading mb-3">Domov</h1>
+  <!-- <img src="img/10.jpg" alt="obesanje"> -->
+  <p>Pozdravljen na prvi strani!</p>
+
+  <p>Seznam parcel:</p>
+  <table border="1">
+    %for id_parcela, ime_parcele, id_rezervacija in parcele:
+      <tr>
+        %if id_rezervacija:
+        <a href="/parcela/{{id_parcela}}">
+          <button class="btn btn-secondary">{{ime_parcele}}</button>
+        </a>
+        %else:
+        <a href="/parcela/{{id_parcela}}">
+          <button class="btn btn-primary">{{ime_parcele}}</button>
+        </a>
+        %end
+      </tr>
+    %end
+  </table>

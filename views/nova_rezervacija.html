@@ -1,0 +1,38 @@
+% rebase('base.html')
+<h1 class="bd-heading mb-3">Vnos nove rezervacije</h1>
+<p>Nova rezervacija</p>
+<form method="POST" action="/naredi-rezervacijo">
+
+  <label for="ime">Ime:</label>
+  <input type="text" name="ime" placeholder="Ime" />
+  
+  <label for="priimek">Priimek:</label>
+  <input type="text" name="priimek" placeholder="Priimek" />
+
+  <label for="emso">EMŠO:</label>
+  <input type="text" name="emso" placeholder="EMSO" />
+
+  <label for="drzava">Drzava:</label>
+  <input type="text" name="drzava" placeholder="SI" />
+
+  <label for="zacetek">Od:</label>
+  <input
+  type="date"
+  name="zacetek"
+  value="{{tomorrow.isoformat()}}"
+  min="{{today.isoformat()}}"
+  disabled
+  />
+
+  <label for="konec">Do:</label>
+  <input
+    type="date"
+    name="konec"
+    value="{{tomorrow.isoformat()}}"
+    min="{{today.isoformat()}}"
+  />
+
+  <input type="text" name="id_parcele" placeholder="Parcela" value="{{id_parcele}}" hidden />
+
+  <input type="submit">
+</form>

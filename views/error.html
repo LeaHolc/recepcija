@@ -1,0 +1,9 @@
+% rebase('base.html')
+  
+<h1 class="bd-heading mb-3">{{naslov if naslov else "Napaka!"}}</h1>
+
+  <p>{{ (sporocilo if sporocilo else "Prišlo je do neznane napake").title() }}</p>
+  
+  <a href="/">
+    <button class="btn btn-primary">Na prvo stran</button>
+  </a>
