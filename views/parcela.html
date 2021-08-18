@@ -1,7 +1,7 @@
 % rebase('base.html')
   
-  <h1 class="bd-heading mb-3">Parcela št. {{ id_parcela }}</h1>
-  <p>{{ stanje}}</p>
+  <h1 class="bd-heading mb-3">Parcela št. {{id_parcela}}</h1>
+  <p>{{stanje}}</p>
 
   %if rezervacija:
     <p>Rezervacija št. {{rezervacija.id_rezervacije}}</p>
@@ -28,24 +28,24 @@
       <th>Spol</th>
       <th>Država</th>
     </tr>
-    %for oseba in gostje:
+    %for gost in gostje:
       <tr>
         <!-- <td>
-          <a href="/gost/{{oseba.emso}}">
+          <a href="/gost/{{gost.emso}}">
             <button class="btn btn-secondary">Uredi</button>
           </a>
         </td> -->
         <td>
-          <p>{{oseba.ime}} {{oseba.priimek}}</p>
+          <p>{{gost.ime}} {{gost.priimek}}</p>
         </td>
         <td>
-          <p>{{oseba.emso}}</p>
+          <p>{{gost.emso}}</p>
         </td>
         <td>
-          <p>{{oseba.spol()}}</p>
+          <p>{{gost.spol()}}</p>
         </td>
         <td>
-          <p>{{oseba.drzava}}</p>
+          <p>{{gost.drzava}}</p>
         </td>
       </tr>
     %end

@@ -1,2 +1,0 @@
-bottle==0.12.19
-# pip install -r requirements.txt

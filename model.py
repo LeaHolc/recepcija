@@ -42,8 +42,14 @@ class Gost:
         self.drzava = drzava
         self.nocitve = nocitve
     
+    def __repr__(self):
+        return f"{self.ime} {self.priimek}"
+    
     def spol(self):
-        return 'M' if self.emso[6:9]=="500" else "Ž"
+        if self.emso[7:10] == '500':
+            return 'M'
+        else:
+            return 'Ž'
 
     def datum_rojstva(self):
         'pretvori emso v datum rojstva'
@@ -71,11 +77,15 @@ class Gost:
     def dobi_naziv_in_ceno_nocitve(self):
         starost = self.starost()
         if starost < 2:
-            return "NOCNINA_ZA_OTROKE_DO_2_LET", NOCNINA_ZA_OTROKE_DO_2_LET
+            return "NOČNINA ZA OTROKE DO 2 LET", NOCNINA_ZA_OTROKE_DO_2_LET
         elif starost >= 2 and starost < 14:
-            return "NOCNINA_ZA_OTROKE_OD_2_DO_14_LET", NOCNINA_ZA_OTROKE_OD_2_DO_14_LET
+            return "NOČNINA ZA OTROKE OD 2 DO 14 LET", NOCNINA_ZA_OTROKE_OD_2_DO_14_LET
         else:
-            return "NOCNINA_ZA_ODRASLE", NOCNINA_ZA_ODRASLE
+            return "NOČNINA ZA ODRASLE", NOCNINA_ZA_ODRASLE
+
+    def cena_nocitve(self):
+        cena = self.dobi_turisticno_takso() + self.dobi_naziv_in_ceno_nocitve()[1]
+        return cena
 
 
     def v_slovar(self):
@@ -167,8 +177,9 @@ class Model:
 
         ## Če datoteka še ne obstaja
         if not os.path.exists(dat):
-            return Model(dat)
-        
+            m= Model(dat)
+            m.shrani()
+            return m
         ## Preberemo datoteko
         with open(dat,encoding='utf-8') as json_file:
             try:
@@ -187,4 +198,4 @@ class Model:
         data["rezervacije"] = {k:v.v_slovar() for k,v in self.rezervacije.items()}
         
         with open(self.datoteka,"w",encoding='utf-8') as write_file:
-            json.dump(data,write_file,indent=4)
+            json.dump(data,write_file,indent=4, ensure_ascii=False)
