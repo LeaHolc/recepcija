@@ -116,10 +116,14 @@ def predracun(id_rezervacije):
     today = dt.date.today()
     gostje = r.gostje
     sestevek, postavke = dobi_postavke_racuna(r)
-    slovar = {}
+    slovar_cen = {}
+    slovar_kolicin = {}
     for gost in gostje:
-        slovar[gost] = format(gost.cena_nocitve() * (len(postavke) // len(gostje)), '.2f')
-    return template("racun", id_rezervacije=id_rezervacije, sestevek=format(sestevek, '.2f'), kolicina=len(postavke) // len(gostje), gostje=gostje, today=today.strftime("%d/%m/%Y"), slovar=slovar)
+        slovar_kolicin[gost] = len(gost.nocitve)
+        slovar_cen[gost] = format(gost.cena_nocitve() * slovar_kolicin.get(gost), '.2f')
+        
+        
+    return template("racun", id_rezervacije=id_rezervacije, sestevek=format(sestevek, '.2f'), gostje=gostje, today=today.strftime("%d/%m/%Y"), slovar_cen=slovar_cen, slovar_kolicin=slovar_kolicin)
 
 @bottle.get("/zakljuci/<id_rezervacije>")
 def racun(id_rezervacije):
@@ -129,10 +133,12 @@ def racun(id_rezervacije):
     today = dt.date.today()
     gostje = r.gostje
     sestevek, postavke = zakljuci_na_datum_in_placaj(r, dt.date.today())
-    slovar = {}
+    slovar_cen = {}
+    slovar_kolicin = {}
     for gost in gostje:
-        slovar[gost] = format(gost.cena_nocitve() * (len(postavke) // len(gostje)), '.2f')
-    return template("racun", id_rezervacije=id_rezervacije, sestevek=format(sestevek, '.2f'), kolicina=len(postavke) // len(gostje), gostje=gostje, today=today.strftime("%d/%m/%Y"), slovar=slovar)
+        slovar_kolicin[gost] = len(gost.nocitve)
+        slovar_cen[gost] = format(gost.cena_nocitve() * slovar_kolicin.get(gost), '.2f')
+    return template("racun", id_rezervacije=id_rezervacije, sestevek=format(sestevek, '.2f'), gostje=gostje, today=today.strftime("%d/%m/%Y"), slovar_cen=slovar_cen, slovar_kolicin=slovar_kolicin)
 
 @bottle.error(404)
 def napaka404(a):
