@@ -1,3 +1,4 @@
 # Recepcija
 ---
-Program za upravljanje z gosti, napisan v programskem jeziku python
+Program za upravljanje z gosti, napisan v programskem jeziku python. 
+Program omogoča pregled nad rezervacijami parcel; proste parcele so obarvane modro, zasedene sivo. Na zasedenih parcelah so torej trenutni gosti, ki še niso poravnali stroškov bivanja. Pri kliku na posamezno parcelo ima uporabnikik možnost izbirati med 3 možnostmi. S klikom na gumb dodajanje gosta, na isto parcelo z vnosom podatkov doda novega gosta, gumb predračun mu omogoča vpogled nad stroški bivanja, ki bodo nastali, če bo gost v kampu bival natanko tolio dni, kot jih je uporabnik vnesel pri samem vpisu gosta. S klikom na gumb zaključi in plačaj, uporabnik izda račun in odjavi goste iz parcele - odstrani rezervacijo. Pri tem se morebitne nočitve, ki so vpisane za kasnejši datum (datum kasneje od današnjega) ne upoštevajo. 
