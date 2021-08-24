@@ -54,13 +54,13 @@ def naredi_novo_rezervacijo():
         print("Napaka pri pretvorbi datumov")
         return redirect("/naredi-rezervacijo")
     
-    r = naredi_rezervacijo(id_parcele)
-    dodaj_gosta_na_rezervacijo(r.id_rezervacije, {
+    rezervacija = naredi_rezervacijo(id_parcele)
+    dodaj_gosta_na_rezervacijo(rezervacija.id_rezervacije, {
         "EMSO":emso,
         "ime":ime,
         "priimek":priimek,
         "drzava":drzava,
-    },datum_od,datum_do)
+    }, datum_od, datum_do)
     return redirect(f"/parcela/{id_parcele}")
 
 @bottle.get("/dodaj-gosta/<id_rezervacije>")
@@ -68,8 +68,8 @@ def get_dodaj_gosta_na_rezervacijo(id_rezervacije):
     today = dt.date.today()
     tomorrow = today + dt.timedelta(days=1)
     
-    r = dobi_rezervacijo_po_id(id_rezervacije)
-    if not r:
+    rezervacija = dobi_rezervacijo_po_id(id_rezervacije)
+    if not rezervacija:
         return template("error", sporocilo="Rezervacija ne obstaja!", naslov="Napaka")
     
     return template("dodajanje_gosta", id_rezervacije=id_rezervacije, today=today, tomorrow=tomorrow)
@@ -96,43 +96,41 @@ def post_dodaj_gosta_na_rezervacijo():
         return redirect("/dodaj-gosta")
 
 
-    r = dobi_rezervacijo_po_id(id_rezervacije)
-    if not r:
+    rezervacija = dobi_rezervacijo_po_id(id_rezervacije)
+    if not rezervacija:
         return template("error", sporocilo="Rezervacija ne obstaja!", naslov="Napaka")
-    dodaj_gosta_na_rezervacijo(r.id_rezervacije, {
+    dodaj_gosta_na_rezervacijo(rezervacija.id_rezervacije, {
         "EMSO":emso,
         "ime":ime,
         "priimek":priimek,
         "drzava":drzava,
     },datum_od,datum_do)
     print(id_rezervacije)
-    return redirect(f"/parcela/{r.id_parcele}")
+    return redirect(f"/parcela/{rezervacija.id_parcele}")
 
 @bottle.get("/predracun/<id_rezervacije>")
 def predracun(id_rezervacije):
-    r = dobi_rezervacijo_po_id(id_rezervacije)
-    if not r:
+    rezervacija = dobi_rezervacijo_po_id(id_rezervacije)
+    if not rezervacija:
         return template("error", sporocilo="Rezervacija ne obstaja!", naslov="Napaka")
     today = dt.date.today()
-    gostje = r.gostje
-    sestevek, postavke = dobi_postavke_racuna(r)
+    gostje = rezervacija.gostje
+    sestevek, postavke = dobi_postavke_racuna(rezervacija)
     slovar_cen = {}
     slovar_kolicin = {}
     for gost in gostje:
         slovar_kolicin[gost] = len(gost.nocitve)
         slovar_cen[gost] = format(gost.cena_nocitve() * slovar_kolicin.get(gost), '.2f')
-        
-        
     return template("racun", id_rezervacije=id_rezervacije, sestevek=format(sestevek, '.2f'), gostje=gostje, today=today.strftime("%d/%m/%Y"), slovar_cen=slovar_cen, slovar_kolicin=slovar_kolicin)
 
 @bottle.get("/zakljuci/<id_rezervacije>")
 def racun(id_rezervacije):
-    r = dobi_rezervacijo_po_id(id_rezervacije)
-    if not r:
+    rezervacija = dobi_rezervacijo_po_id(id_rezervacije)
+    if not rezervacija:
         return template("error", sporocilo="Rezervacija ne obstaja!", naslov="Napaka")
     today = dt.date.today()
-    gostje = r.gostje
-    sestevek, postavke = zakljuci_na_datum_in_placaj(r, dt.date.today())
+    gostje = rezervacija.gostje
+    sestevek, postavke = zakljuci_na_datum_in_placaj(rezervacija, dt.date.today())
     slovar_cen = {}
     slovar_kolicin = {}
     for gost in gostje:
@@ -147,8 +145,5 @@ def napaka404(a):
 @bottle.error(500)
 def napaka500(a):
     return template("error", sporocilo="Napaka streznika!", naslov="500")
-
-# if __name__=='__main__':
-#     bottle.run(host='localhost', port=8080, debug=True)
 
 bottle.run(reloader=True, debug=True)
